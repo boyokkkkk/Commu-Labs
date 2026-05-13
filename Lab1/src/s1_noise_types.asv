@@ -19,7 +19,7 @@ function s1_noise_types(target_snr, impulse_prob, impulse_amp)
     rx_signal_burst = rx_signal_awgn + impulse_noise;
 
     % 信道 3：瑞利平坦衰落 + AWGN
-    rayleigh_env = sqrt(randn(size(tx_signal)).^2 + randn(size(tx_signal)).^2) / sqrt(2); 
+    rayleigh_env = raylrnd(1, size(tx_signal)); 
     rx_signal_rayleigh = tx_signal .* rayleigh_env;
     rx_signal_rayleigh = awgn(rx_signal_rayleigh, target_snr, 'measured');
     
@@ -65,8 +65,9 @@ function s1_noise_types(target_snr, impulse_prob, impulse_amp)
     imshow(reshape(bits_jamming, img_height, img_width)); 
     title(sprintf('AWGN + 单频正弦干扰\nBER = %.4f', ber_jamming), 'FontSize', 12);
 
+    % 自動保存
     if ~exist('result/B_s1', 'dir'), mkdir('result/B_s1'); end
-    filename = sprintf('result/B_s1/SNR%d_Prob%.3f_Compare.png', target_snr, impulse_prob);
+    filename = sprintf('result_/SNR%d_Compare.png', target_snr);
     exportgraphics(fig, filename, 'Resolution', 300);
     close(fig);
 end
